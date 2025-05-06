@@ -1,4 +1,4 @@
-import SortIcon from '@mui/icons-material/Sort';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 function ProjectOptions({ projectName }) {
     return (
@@ -9,7 +9,7 @@ function ProjectOptions({ projectName }) {
             <div className="mx-2 my-4">
                 <ul>
                     <li className="gantt-view">
-                        <SortIcon className="text-gray-600" />
+                        <AccountTreeIcon className="text-gray-600 mr-3" />
                         <span>Gantt</span>
                     </li>
                 </ul>

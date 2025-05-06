@@ -73,9 +73,7 @@ function DashOptions({ options, setOptions }) {
                 </button>
 
             </div>
-            <div>
-                <span className="mt-5 p-2 text-sm font-bold">PROJECTS</span>
-            </div>
+            
             <WorkbookDialog
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent, CircularProgress } from "@mui/material";
-import CreateWorkbook from "./CreateWorkbook";
-import SettingsWorkbook from "./SettingsWorkbook";
+import CreateProject from "./CreateProject";
 
 const backdropStyle = {
     backdrop: {
@@ -9,7 +8,7 @@ const backdropStyle = {
     }
 }
 
-function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreated }) {
+function ProjectDialog({ openDialog, setOpenDialog, dialogType, onProjectCreated, idWorkbook }) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -23,13 +22,13 @@ function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreat
     const renderContent = () => {
         switch (dialogType) {
             case "new":
-                return <CreateWorkbook
+                return <CreateProject
                     openDialog={openDialog}
                     setOpenDialog={setOpenDialog}
-                    onWorkbookCreated={onWorkbookCreated}
-                />;
+                    onProjectCreated={onProjectCreated}
+                    idWorkbook = {idWorkbook} />;
             case "settings":
-                return <SettingsWorkbook />;
+                return <SettingsProject />;
             default:
                 return null;
         }
@@ -55,7 +54,6 @@ function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreat
                 <button
                     disabled={loading}
                 >
-                    {/*cita.estado === "RESERVADA" ? "Marcar como finalizada" : "Archivar"*/}
                     {loading && <CircularProgress color="warning" thickness={8} size={20} />}
                 </button>
 
@@ -67,4 +65,4 @@ function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreat
 
 }
 
-export default WorkbookDialog;   
+export default ProjectDialog;   
