@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, CircularProgress } from "@mui/material";
 import CreateProject from "./CreateProject";
+import SettingsProject from "./SettingsProject";
 
 const backdropStyle = {
     backdrop: {
@@ -8,7 +9,7 @@ const backdropStyle = {
     }
 }
 
-function ProjectDialog({ openDialog, setOpenDialog, dialogType, onProjectCreated, idWorkbook }) {
+function ProjectDialog({ openDialog, setOpenDialog, dialogType, onProjectCreated, idWorkbook, projectId }) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -26,9 +27,16 @@ function ProjectDialog({ openDialog, setOpenDialog, dialogType, onProjectCreated
                     openDialog={openDialog}
                     setOpenDialog={setOpenDialog}
                     onProjectCreated={onProjectCreated}
-                    idWorkbook = {idWorkbook} />;
+                    idWorkbook={idWorkbook}
+                />;
             case "settings":
-                return <SettingsProject />;
+                return <SettingsProject
+                    openDialog={openDialog}
+                    setOpenDialog={setOpenDialog}
+                    onProjectEdited={onProjectCreated}
+                    idWorkbook={idWorkbook}
+                    projectId={projectId}
+                />;
             default:
                 return null;
         }

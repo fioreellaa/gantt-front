@@ -6,6 +6,7 @@ import { TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const iconToTextfield = {
     input: {
@@ -21,12 +22,16 @@ function ProjectDash({ options }) {
     const [project, setProject] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [dialogType, setDialogType] = useState(null);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
 
     const [search, setSearch] = useState('');
 
     const handleOpenDialog = (type) => {
         setDialogType(type);
+        //setSelectedProjectId(projectId); 
         setOpenDialog(true);
+
+       
     };
 
     const loadProjects = async () => {
@@ -38,9 +43,11 @@ function ProjectDash({ options }) {
         setProject(data);
     };
 
-    const filteredProjects = project.filter(p =>
+    const filteredProjects = project
+    .filter(p =>
         p.name_project.toLowerCase().includes(search.toLowerCase())
-    );
+    )
+    .filter(p => p.state === 1); 
 
     useEffect(() => {
         if (options.workbook?.id_workbook) {
@@ -79,9 +86,11 @@ function ProjectDash({ options }) {
                         <p className="text-gray-500">No projects found.</p>
                     ) : (
                         filteredProjects.map((p) => (
-                            <div key={p.id_project} className="p-2 my-2 flex hover:text-blue-500 cursor-pointer" onClick={() => handleOpenDialog("settings")}>
+                            
+                            <div key={p.id_project} className="p-2 my-2 flex hover:text-blue-500 cursor-pointer" >
                                 <AssignmentIcon className="text-xxl mr-3 text-blue-400 " />
                                 <h3 className="text-xxl">{p.name_project}</h3>
+                                <SettingsIcon className="text-xxl ml-auto text-blue-400 " onClick={() => {setSelectedProjectId(p.id_project); handleOpenDialog("settings")}} />
                             </div>
                         ))
                     )}
@@ -97,6 +106,7 @@ function ProjectDash({ options }) {
                 dialogType={dialogType}
                 onProjectCreated={loadProjects}
                 idWorkbook={options.workbook?.id_workbook}
+                projectId={selectedProjectId}
             />
         </>
 

@@ -29,7 +29,11 @@ function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreat
                     onWorkbookCreated={onWorkbookCreated}
                 />;
             case "settings":
-                return <SettingsWorkbook />;
+                return <SettingsWorkbook
+                    openDialog={openDialog}
+                    setOpenDialog={setOpenDialog}
+                    onWorkbookCreated={onWorkbookCreated}
+                />;
             default:
                 return null;
         }
