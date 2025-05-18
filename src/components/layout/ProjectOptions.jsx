@@ -1,10 +1,10 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
-function ProjectOptions({ projectName }) {
+function ProjectOptions({ workbook_name, projectName }) {
     return (
         <>
             <div className="text-xl ">
-                {projectName ? `${projectName}` : "Select a project"}
+                {workbook_name ? `${workbook_name} : ${projectName}` : "Select a project"}
             </div>
             <div className="mx-2 my-4">
                 <ul>

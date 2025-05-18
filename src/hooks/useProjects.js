@@ -65,7 +65,7 @@ export const useProjects = () => {
                 name_project: body.projectName
             }
 
-            const [data, error] = await saveProject(JSON.stringify(json))
+            const [data, error] = await saveProject(json)
 
             if (error) {
                 console.log(error);

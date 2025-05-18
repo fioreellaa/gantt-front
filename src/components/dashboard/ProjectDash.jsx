@@ -17,7 +17,7 @@ const iconToTextfield = {
         )
     }
 }
-function ProjectDash({ options }) {
+function ProjectDash({ options, setOptions }) {
 
     const [project, setProject] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
@@ -55,6 +55,14 @@ function ProjectDash({ options }) {
         }
     }, [options.workbook?.id_workbook]);
 
+    const handleSelect = (selected) => {
+      setOptions(prev => ({
+              ...prev,
+              project: selected || {},
+              projectName: selected?.name_project
+         }));
+    }
+
 
     return (
         <>
@@ -87,9 +95,11 @@ function ProjectDash({ options }) {
                     ) : (
                         filteredProjects.map((p) => (
                             
-                            <div key={p.id_project} className="p-2 my-2 flex hover:text-blue-500 cursor-pointer" >
+                            <div key={p.id_project} className="p-2 my-2 flex hover:text-blue-500" >
+                                <div className=' flex cursor-pointer' onClick={() => handleSelect(p)}>
                                 <AssignmentIcon className="text-xxl mr-3 text-blue-400 " />
                                 <h3 className="text-xxl">{p.name_project}</h3>
+                                </div>
                                 <SettingsIcon className="text-xxl ml-auto text-blue-400 " onClick={() => {setSelectedProjectId(p.id_project); handleOpenDialog("settings")}} />
                             </div>
                         ))

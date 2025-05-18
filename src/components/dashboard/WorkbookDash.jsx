@@ -29,7 +29,7 @@ function DashOptions({ options, setOptions }) {
         setOptions(prev => ({
             ...prev,
             workbook: selected || {},
-            projectName: selected?.workbook_name
+            workbook_name: selected?.workbook_name,
         }));
     };
 
@@ -79,6 +79,7 @@ function DashOptions({ options, setOptions }) {
                 setOpenDialog={setOpenDialog}
                 dialogType={dialogType}
                 onWorkbookCreated={loadWorkbooks}
+                selectedWorkbookId={options.workbook?.id_workbook}
             ></WorkbookDialog>
         </>
     )

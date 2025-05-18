@@ -29,12 +29,13 @@ export const getFetch = async (url) => {
 export const postFetch = async (url, body) => {
   let result = [null, null]
   try {
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body
+      body: JSON.stringify(body)
     })
 
     if (!response.ok) {
@@ -42,11 +43,15 @@ export const postFetch = async (url, body) => {
         status: response.status,
         message: `Error: ${response.statusText}` 
       }
+                console.log("Enviando body 2:", body)
+
       return result
     }
 
     const data = await response.json()
     result[0] = data
+          console.log("Enviando body 2:", body)
+
     return result
   }
   catch (ex) {

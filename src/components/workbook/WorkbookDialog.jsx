@@ -9,7 +9,7 @@ const backdropStyle = {
     }
 }
 
-function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreated }) {
+function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreated, selectedWorkbookId }) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -33,6 +33,7 @@ function WorkbookDialog({ openDialog, setOpenDialog, dialogType, onWorkbookCreat
                     openDialog={openDialog}
                     setOpenDialog={setOpenDialog}
                     onWorkbookCreated={onWorkbookCreated}
+                    currentWorkbookId={selectedWorkbookId}
                 />;
             default:
                 return null;

@@ -3,19 +3,15 @@ import DashOptions from './WorkbookDash';
 import { useState, useEffect, useCallback } from "react";
 import ProjectDash from './ProjectDash';
 
-function Hamburguesa({options, setOptions}) {
+function Hamburguesa({ options, setOptions }) {
 
     const [isOpen, setIsOpen] = useState(false);
-    
 
-    
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
-    
 
-  
     return (
         <div className="relativa">
             <MenuIcon className='cursor-pointer' onClick={toggleMenu}></MenuIcon>
@@ -31,10 +27,10 @@ function Hamburguesa({options, setOptions}) {
                     </div>
                 </div>
                 <div>
-                    <DashOptions options= {options} setOptions={setOptions}></DashOptions>
+                    <DashOptions options={options} setOptions={setOptions}></DashOptions>
                 </div>
                 <div>
-                    <ProjectDash options= {options}></ProjectDash>
+                    <ProjectDash options={options} setOptions={setOptions}></ProjectDash>
                 </div>
 
             </div>

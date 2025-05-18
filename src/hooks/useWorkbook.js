@@ -18,7 +18,7 @@ export const useWorkbook = () => {
                 workbook_name: body.workbookName
             }
  
-            const [data, error] = await saveWorkbook(JSON.stringify(json))
+            const [data, error] = await saveWorkbook(json)
         
             if(error){
                 console.log(error);

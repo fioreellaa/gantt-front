@@ -14,17 +14,34 @@ const iconToTextfield = {
     }
 }
 
-function TaskFilters({filters, setFilters}){
+function TaskFilters({filters, setFilters, collapsedSections, setCollapsedSections}) {
+
+    const handleExpand = () => {
+        const updated = {};
+        Object.keys(collapsedSections).forEach(id => {
+            updated[id] = false;
+        });
+        setCollapsedSections(updated)
+    }
+
+    const handleCollapse = () => {
+        const updated = {};
+        Object.keys(collapsedSections).forEach(id => {
+            updated[id] = true;
+        });
+        setCollapsedSections(updated);
+    }
+
     return(
         <>
             <div className='flex gap-4 items-center'>
                 <div className='my-1 border-r h-auto p-2 flex items-center gap-2 w-fit'>
-                    <AddBoxIcon/> 
-                    <IndeterminateCheckBoxIcon/>
+                    <AddBoxIcon onClick={handleExpand} className="cursor-pointer hover:text-blue-500"/> 
+                    <IndeterminateCheckBoxIcon onClick={handleCollapse} className="cursor-pointer hover:text-blue-500" />
                 </div> 
-                <div className="w-2/5"> 
+                <div className="w-2/5 p-2"> 
                     <TextField
-                    className="w-full dark:invert dark:hue-rotate-180"
+                    className="w-full"
                     label="Buscar tarea"
                     value= ""
                     
