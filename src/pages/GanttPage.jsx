@@ -48,7 +48,7 @@ function GanttPage() {
                 <div className="w-1/2 px-6">
                     <h1>GANTT</h1>
 
-
+                    
                 </div>
             </div>
         </>

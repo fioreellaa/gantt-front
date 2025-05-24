@@ -34,12 +34,12 @@ function TaskFilters({filters, setFilters, collapsedSections, setCollapsedSectio
 
     return(
         <>
-            <div className='flex gap-4 items-center'>
-                <div className='my-1 border-r h-auto p-2 flex items-center gap-2 w-fit'>
+            <div className='grid grid-cols-[0.5fr_2fr_1fr_1fr_1fr_1fr] gap-4 items-center'>
+                <div className='flex items-center gap-2 border-r p-2'>
                     <AddBoxIcon onClick={handleExpand} className="cursor-pointer hover:text-blue-500"/> 
                     <IndeterminateCheckBoxIcon onClick={handleCollapse} className="cursor-pointer hover:text-blue-500" />
                 </div> 
-                <div className="w-2/5 p-2"> 
+                <div className="p-2"> 
                     <TextField
                     className="w-full"
                     label="Buscar tarea"
@@ -52,19 +52,19 @@ function TaskFilters({filters, setFilters, collapsedSections, setCollapsedSectio
                     }))}
                 />
                 </div>
-                <div className="w-1/5 my-1 border-r h-auto p-2 flex items-center gap-2 ">   
+                <div className="text-sm flex items-center gap-2 border-r p-2">   
                     <span className='text-sm'>ASSIGNEE</span>  
                     <FilterAltIcon className='text-xs text-gray-300'/>
                 </div>
-                <div className="w-1/5 my-1 border-r h-auto p-2 flex items-center gap-2 ">   
+                <div className="text-sm flex items-center gap-2 border-r p-2 ">   
                     <span className='text-sm'>START</span>  
                     <FilterAltIcon className='text-gray-300'/>
                 </div>
-                <div className="w-1/5 my-1 border-r h-auto p-2 flex items-center gap-2 ">   
+                <div className="text-sm flex items-center gap-2 border-r p-2">   
                     <span className='text-sm'>DUE</span>  
                     <FilterAltIcon className='text-gray-300'/>
                 </div>
-                <div className="w-1/5 my-1 border-r h-auto p-2 flex items-center gap-2 ">   
+                <div className="text-sm flex items-center gap-2 border-r p-2">   
                     <span className='text-sm'>STATUS</span>  
                     <FilterAltIcon className='text-gray-300'/>
                 </div>
