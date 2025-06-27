@@ -1,10 +1,11 @@
-import { getTasks, getTasksBySection, saveTask } from "../services/taskCalls";
+import { duration } from "@mui/material";
+import { getTasks, getTasksByProject, saveTask } from "../services/taskCalls";
 
 export const useSections = () => {
 
     return {
         getTasks: async () => {
-            const [data, error] = await getTasks ()
+            const [data, error] = await getTasks()
             if (error) {
                 console.log(error);
                 return []
@@ -12,8 +13,9 @@ export const useSections = () => {
             return [...data]
         },
 
-        getTasksBySection: async (id_section) => {
-            const [data, error] = await getTasksBySection(id_section)
+        getTasksByProject: async (id_project) => {
+            const [data, error] = await getTasksByProject(id_project)
+            console.log("Tasks by project:", data);
             if (error) {
                 console.log(error);
                 return []
@@ -24,11 +26,16 @@ export const useSections = () => {
         saveTask: async (body) => {
 
             const json = {
-                id_section: {
-                    id_section: body.id_section.id_section
-                },
-                name_task: body.name_task
-            }
+                project: body.project,
+                parentTask: body.parent_task ? { id_task: body.parent_task.id_task } : null,
+                name_task: body.name_task,
+                description_task: body.description_task ?? "",
+                duration: body.duration ?? 0,
+                start_date: body.start_date,
+                end_date: body.end_date,
+                progress: body.progress ?? 0,
+                state: body.state ?? 1
+            };
 
             const [data, error] = await saveTask(json)
 

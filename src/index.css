@@ -24,3 +24,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.gantt_grid {
+  display: none !important;
+}

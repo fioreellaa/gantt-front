@@ -1,4 +1,4 @@
-import { getSections, getSectionsByProject, saveSection } from "../services/sectionCalls";
+import { getSections, getSectionsByProject, getSectionsWithTaskByProject, saveSection } from "../services/sectionCalls";
 
 export const useSections = () => {
 
@@ -14,6 +14,15 @@ export const useSections = () => {
 
         getSectionsByProject: async (id_project) => {
             const [data, error] = await getSectionsByProject(id_project)
+            if (error) {
+                console.log(error);
+                return []
+            }
+            return [...data]
+        },
+
+        getSectionsWithTaskByProject: async (id_project) => {
+            const [data, error] = await getSectionsWithTaskByProject(id_project)
             if (error) {
                 console.log(error);
                 return []
