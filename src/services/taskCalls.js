@@ -11,3 +11,7 @@ export const getTasksByProject = (id_project) => {
 export const saveTask = (body) => {
   return postFetch(`${BASE_URL}/tasks/create`, body)
 }
+
+export const updateTask = (body) => {
+  return postFetch(`${BASE_URL}/tasks/update`, body)
+}

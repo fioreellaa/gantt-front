@@ -7,13 +7,23 @@ import { Willow } from "wx-react-gantt";
 import { getTasksByProject } from "../../services/taskCalls";
 import { saveTask } from "../../services/taskCalls";
 import { BASE_URL } from "../../constants/services";
+import { useCallback } from "react";
 import { RestDataProvider } from "wx-gantt-data-provider";
+
+const dayDiff = (next, prev) => {
+  const d = (next - prev) / 1000 / 60 / 60 / 24;
+  return Math.ceil(Math.abs(d));
+};
 
 
 function GanttItem({ project }) {
 
   const [tasks, setTasks] = useState([]);
   const [links, setLinks] = useState([]);
+  const gApiRef = useRef();
+
+  console.log("Proyecto seleccionado:", project);
+
 
   const columns = [
     {
@@ -115,7 +125,8 @@ function GanttItem({ project }) {
           : task.type === 3
             ? "milestone"
             : "task",
-      parent: task.parent_id ?? null
+      parent: task.parent_id ?? null,
+      duration: task.duration ?? dayDiff(task.end_date, task.start_date)
     }));
 
     let links = [];
@@ -151,66 +162,72 @@ function GanttItem({ project }) {
   }, [project]);
 
 
-  //const server = new RestDataProvider(`${BASE_URL}`);
-const apiRef = useRef(null);
+  const handleAddTask = async ({ task }) => {
+    console.log("Tarea recibida:", task);
 
-useEffect(() => {
-  if (!apiRef.current) return;
+    if (!task?.text || !task?.start || !task?.end || !project?.id_project) {
+      console.warn("Datos incompletos para guardar:", { task, project });
+      return null;
+    }
 
-  const server = new CustomDataProvider(`${BASE_URL}`);
-  server.setApiRef(apiRef);
-  server.setTasks(tasks);
-  server.setLinks(links);
+    const body = {
+      name_task: task.text,
+      description_task: task.description_task ?? "",
+      start_date: task.start,
+      end_date: task.end,
+      duration: task.duration ?? dayDiff(new Date(task.end), new Date(task.start)),
+      progress: task.progress ?? 0,
+      state: task.state ?? 1,
+      parent_task: task.parent ? { id_task: task.parent } : null,
+      project: { id_project: project.id_project },
+    };
 
-  apiRef.current.setDataProvider(server);
-}, [apiRef.current, tasks, links]);
-  /*useEffect(() => {
-    // Cargar datos del backend
-    server.getData().then((data) => {
-      setTasks(data.tasks || []);
-      setLinks(data.links || []);
-    });
-  }, [project]);
+    const [savedTask, error] = await saveTask(body);
 
-  /*useEffect(() => {
-     if (!apiRef.current) return;
- 
-     const handleAddTask = async (task) => {
-       console.log("Gantt lanzó add-task:", task);
-       const parentId = task.parent;
-       const sectionId = ganttSectionMap[parentId]; 
-       if (!sectionId) {
-         console.warn("No se pudo encontrar sección para", task);
-         return;
-       }
- 
-       const [savedTask, error] = await saveTask({
-         name_task: task.text,
-         start_date: task.start,
-         end_date: task.end,
-         progress: task.progress ?? 0,
-         state: task.state ?? 1,
-         id_section: sectionId,
-       });
- 
-       if (error) {
-         console.error("Error guardando tarea:", error);
-         return;
-       }
- 
-       apiRef.current.updateTask({
-         ...task,
-         id: savedTask.id_task,
-       });
-     };
- 
-     apiRef.current.on("add-task", handleAddTask);
- 
-     return () => {
-       apiRef.current.off("add-task", handleAddTask);
-     };
-   }, [ganttSectionMap]);*/
+    if (error || !savedTask?.id_task) {
+      console.error(" Error al guardar tarea:", error, body);
+      return null;
+    }
 
+    return {
+      ...task,
+      id: savedTask.id_task,
+    };
+  };
+
+  const handleUpdateTask = async ({ id, task }) => {
+  console.log("Editando tarea:", id, task);
+
+  if (!task?.text || !task?.start || !task?.end || !project?.id_project) {
+    console.warn("Datos incompletos al editar:", { id, task, project });
+    return null;
+  }
+
+  const body = {
+    id_task: id,
+    name_task: task.text,
+    description_task: task.description_task ?? "",
+    start_date: task.start,
+    end_date: task.end,
+    duration: task.duration ?? dayDiff(new Date(task.end), new Date(task.start)),
+    progress: task.progress ?? 0,
+    state: task.state ?? 1,
+    parent_task: task.parent ? { id_task: task.parent } : null,
+    project: { id_project: project.id_project },
+  };
+
+  const [updatedTask, error] = await saveTask(body); 
+
+  if (error || !updatedTask?.id_task) {
+    console.error("Error al actualizar tarea:", error);
+    return null;
+  }
+
+  return {
+    ...task,
+    id: updatedTask.id_task,
+  };
+};
 
 
 
@@ -218,51 +235,14 @@ useEffect(() => {
     <>
       <Willow>
         <Gantt
-          onInit={(instance) => apiRef.current = instance}
+          //onInit={init}
           tasks={tasks}
           scales={scales}
           columns={columns}
           editorShape={editorShape}
           links={links}
-          onAddTask={async (task) => {
-           
-            if (!task.text || !task.start || !task.end || !project?.id_project) {
-              console.warn(" Datos de la tarea incompletos:", {
-                text: task.text,
-                start: task.start,
-                end: task.end,
-                project: project?.id_project,
-              });
-              return null; 
-            }
-
-            console.log("Nueva tarea creada desde el Gantt:", task);
-
-            const body = {
-              name_task: task.text,
-              start_date: task.start,
-              end_date: task.end,
-              progress: task.progress ?? 0,
-              duration: task.duration ?? 0,
-              state: task.state ?? 1,
-              parent_task: task.parent ? { id_task: task.parent } : null,
-              project: project.id_project,
-            };
-
-            const [savedTask, error] = await saveTask(body);
-
-            if (error) {
-              console.error("Error guardando tarea:", error);
-              return;
-            }
-
-            return {
-              ...task,
-              id: savedTask.id_task,
-            };
-          }}
-
-
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
           editable={true}
         />
 
