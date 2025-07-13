@@ -1,26 +1,31 @@
 import { Divider } from "@mui/material";
 import ProjectOptions from "../components/layout/ProjectOptions";
-import TaskFilters from "../components/tasks/TaskFilters";
 import Hamburguesa from "../components/dashboard/Hamburguesa";
-import { useEffect, useState } from "react";
-import TaskList from "../components/tasks/TaskList";
 import GanttItem from "../components/gantt/ganttItem";
 import "wx-react-gantt/dist/gantt.css";
-import { defaultEditorShape } from "wx-react-gantt";
-
+import { useState } from "react";
+import { useAccountStore } from "../store/useAccountStore"; 
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function GanttPage() {
 
     const [options, setOptions] = useState({
         workbook: "",
         workbook_name: "",
-        project: "",
-        projectName: ""
+        project: null,
+        projectName: "",
     });
 
+    const account = useAccountStore(state => state.account);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!account) {
+            navigate("/login");
+        }
+    }, [account]);
     
-
-
     return (
         <>
 
@@ -28,12 +33,12 @@ function GanttPage() {
                 <Hamburguesa options={options} setOptions={setOptions}></Hamburguesa>
 
                 <div className="w-full px-6">
-                    <ProjectOptions workbook_name={options.workbook_name} projectName={options.projectName}></ProjectOptions>
+                    <ProjectOptions workbook_name={options.workbook_name} projectName={options.projectName} ></ProjectOptions>
 
-                    
+
                     <GanttItem
-                      project={options.project}
-                        
+                        project={options.project}
+
                     ></GanttItem>
 
                 </div>

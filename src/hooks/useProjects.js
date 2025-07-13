@@ -6,7 +6,7 @@ export const useProjects = () => {
         getProjects: async () => {
             const [data, error] = await getProjects()
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -15,7 +15,7 @@ export const useProjects = () => {
         getProjectById: async (idProject) => {
             const [data, error] = await getProjectById(idProject)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return null
             }
             return data
@@ -24,7 +24,7 @@ export const useProjects = () => {
         getProjectsByWorkbook: async (idWorkbook) => {
             const [data, error] = await getProjectsByWorkbook(idWorkbook)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -33,7 +33,7 @@ export const useProjects = () => {
         updateStateProject: async (projectId) => {
             const [data, error] = await updateStateProject(projectId)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return false
             }
             return true
@@ -46,10 +46,10 @@ export const useProjects = () => {
             }
             const [data, error] = await updateProjectName(json)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return false;
             } else if (data.id_project > 0) {
-                console.log("Project updated successfully:", data);
+                //console.log("Project updated successfully:", data);
                 return true;
             }
             return true;

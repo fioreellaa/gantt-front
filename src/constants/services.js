@@ -1,8 +1,12 @@
 export const BASE_URL = "http://localhost:8080"
+
 export const getFetch = async (url) => {
   let result = [null, null]
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      credentials: 'include'
+    });
+    
     if (!response.ok) {
       result[1] = {
         status: response.status,
@@ -10,7 +14,7 @@ export const getFetch = async (url) => {
       }
       return result
     }
-    
+
     const data = await response.json()
     
     result[0] = data
@@ -35,22 +39,31 @@ export const postFetch = async (url, body) => {
       headers: {
         "Content-Type": "application/json"
       },
+      credentials: "include",
       body: JSON.stringify(body)
     })
 
     if (!response.ok) {
       result[1] = {
         status: response.status,
-        message: `Error: ${response.statusText}` 
+        message: `Error: ${response.statusText}`
       }
-                console.log("Enviando body 2:", body)
+      //console.log("Enviando body 2:", body)
 
       return result
     }
+    const contentType = response.headers.get("Content-Type");
+    
+    let data;
 
-    const data = await response.json()
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
+
     result[0] = data
-          console.log("Enviando body 2:", body)
+    //console.log("Enviando body 2:", body)
 
     return result
   }
@@ -72,6 +85,7 @@ export const putFetch = async (url, body) => {
       headers: {
         "Content-Type": "application/json"
       },
+      credentials: "include",
       body: JSON.stringify(body)
     })
 

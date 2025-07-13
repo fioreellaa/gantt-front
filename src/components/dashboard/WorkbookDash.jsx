@@ -37,7 +37,7 @@ function DashOptions({ options, setOptions }) {
         const fetchData = async () => {
             try {
                 loadWorkbooks();
-                console.log("workbooks:", workbook);
+                //console.log("workbooks:", workbook);
 
             } catch (error) {
                 console.error("Error fetching workbooks:", error);
@@ -80,6 +80,8 @@ function DashOptions({ options, setOptions }) {
                 dialogType={dialogType}
                 onWorkbookCreated={loadWorkbooks}
                 selectedWorkbookId={options.workbook?.id_workbook}
+                workbookName={options.workbook_name}
+                setOptions={setOptions}
             ></WorkbookDialog>
         </>
     )

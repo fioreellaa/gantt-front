@@ -6,7 +6,7 @@ export const useSections = () => {
         getSections: async () => {
             const [data, error] = await getSections()
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -15,7 +15,7 @@ export const useSections = () => {
         getSectionsByProject: async (id_project) => {
             const [data, error] = await getSectionsByProject(id_project)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -24,7 +24,7 @@ export const useSections = () => {
         getSectionsWithTaskByProject: async (id_project) => {
             const [data, error] = await getSectionsWithTaskByProject(id_project)
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -42,10 +42,10 @@ export const useSections = () => {
             const [data, error] = await saveSection(json)
 
             if (error) {
-                console.log(error, json);
+                //console.log(error, json);
                 return false;
             } else if (data.id_section > 0) {
-                console.log("Section created successfully:", data);
+                //console.log("Section created successfully:", data);
                 return true;
             }
             return true;

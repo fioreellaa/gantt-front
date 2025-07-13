@@ -20,9 +20,7 @@ function GanttItem({ project }) {
 
   const [tasks, setTasks] = useState([]);
   const [links, setLinks] = useState([]);
-  const gApiRef = useRef();
-
-  console.log("Proyecto seleccionado:", project);
+  //const gApiRef = useRef();
 
 
   const columns = [
@@ -59,7 +57,7 @@ function GanttItem({ project }) {
           7: "Rejected",
 
         };
-        return statusMap[state] || "Unknown";
+        return statusMap[state] || "Not Started";
       }
     },
     {
@@ -105,7 +103,7 @@ function GanttItem({ project }) {
 
   const loadTasksAndLinks = async () => {
     const [data, error] = await getTasksByProject(project.id_project);
-    console.log("Tasks and links data:", data);
+    //console.log("Tasks and links data:", data);
     if (error) {
       console.error("Error fetching sections with tasks:", error);
       return;
@@ -114,8 +112,8 @@ function GanttItem({ project }) {
     const transformedTasks = (data || []).map((task) => ({
       id: task.id_task,
       text: task.name_task,
-      start: task.start_date,
-      end: task.end_date,
+      start: new Date(task.start_date),
+      end: new Date(task.end_date),
       progress: task.progress ?? 0,
       state: task.state ?? 1,
       type: task.type === 1
@@ -163,7 +161,7 @@ function GanttItem({ project }) {
 
 
   const handleAddTask = async ({ task }) => {
-    console.log("Tarea recibida:", task);
+    //console.log("Tarea recibida:", task, " project:", project);
 
     if (!task?.text || !task?.start || !task?.end || !project?.id_project) {
       console.warn("Datos incompletos para guardar:", { task, project });
@@ -178,7 +176,8 @@ function GanttItem({ project }) {
       duration: task.duration ?? dayDiff(new Date(task.end), new Date(task.start)),
       progress: task.progress ?? 0,
       state: task.state ?? 1,
-      parent_task: task.parent ? { id_task: task.parent } : null,
+      type: task.type === "summary" ? 1 : task.type === "task" ? 2 : task.type === "milestone" ? 3 : 2,
+      parentTask: task.parent ? { id_task: task.parent } : null,
       project: { id_project: project.id_project },
     };
 
@@ -196,57 +195,68 @@ function GanttItem({ project }) {
   };
 
   const handleUpdateTask = async ({ id, task }) => {
-  console.log("Editando tarea:", id, task);
+    console.log("Editando tarea:", id, task);
 
-  if (!task?.text || !task?.start || !task?.end || !project?.id_project) {
-    console.warn("Datos incompletos al editar:", { id, task, project });
-    return null;
-  }
+    if (!task?.text || !task?.start || !task?.end || !project?.id_project) {
+      console.warn("Datos incompletos al editar:", { id, task, project });
+      return null;
+    }
 
-  const body = {
-    id_task: id,
-    name_task: task.text,
-    description_task: task.description_task ?? "",
-    start_date: task.start,
-    end_date: task.end,
-    duration: task.duration ?? dayDiff(new Date(task.end), new Date(task.start)),
-    progress: task.progress ?? 0,
-    state: task.state ?? 1,
-    parent_task: task.parent ? { id_task: task.parent } : null,
-    project: { id_project: project.id_project },
+    if (typeof id === "string" && id.startsWith("temp://")) {
+      console.warn("Intentando editar tarea con ID temporal:", id);
+      return null;
+    }
+
+    const body = {
+      id_task: Number(id),
+      name_task: task.text,
+      description_task: task.description_task ?? "",
+      start_date: task.start,
+      end_date: task.end,
+      duration: task.duration ?? dayDiff(new Date(task.end), new Date(task.start)),
+      progress: task.progress ?? 0,
+      state: task.state ?? 1,
+      parentTask: task.parent ? { id_task: task.parent } : null,
+      project: { id_project: project.id_project },
+      type: task.type === "summary" ? 1 : task.type === "task" ? 2 : task.type === "milestone" ? 3 : 2,
+
+    };
+
+    const [updatedTask, error] = await saveTask(body);
+
+    if (error || !updatedTask?.id_task) {
+      console.error("Error al actualizar tarea:", error);
+      return null;
+    }
+
+    return {
+      ...task,
+      id: updatedTask.id_task,
+    };
   };
-
-  const [updatedTask, error] = await saveTask(body); 
-
-  if (error || !updatedTask?.id_task) {
-    console.error("Error al actualizar tarea:", error);
-    return null;
-  }
-
-  return {
-    ...task,
-    id: updatedTask.id_task,
-  };
-};
 
 
 
   return (
     <>
-      <Willow>
-        <Gantt
-          //onInit={init}
-          tasks={tasks}
-          scales={scales}
-          columns={columns}
-          editorShape={editorShape}
-          links={links}
-          onAddTask={handleAddTask}
-          onUpdateTask={handleUpdateTask}
-          editable={true}
-        />
+      <div style={{ height: '80vh', overflow: 'auto' }}>
+        <Willow>
+          <Gantt
+            //onInit={init}
+            key={project?.id_project}
+            tasks={tasks}
+            scales={scales}
+            columns={columns}
+            editorShape={editorShape}
+            links={links}
+            editable={true}
+            onAddTask={handleAddTask}
+            onUpdateTask={handleUpdateTask}
 
-      </Willow>
+          />
+
+        </Willow>
+      </div>
     </>
 
   );

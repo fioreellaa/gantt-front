@@ -1,4 +1,4 @@
-import { getWorkbooks, saveWorkbook } from "../services/workbookCalls";
+import { getWorkbooks, saveWorkbook, updateWorkbook } from "../services/workbookCalls";
 
 export const useWorkbook = () => {
 
@@ -6,7 +6,7 @@ export const useWorkbook = () => {
         getWorkbooks: async () => {
            const [data, error] = await getWorkbooks()
            if(error){
-            console.log(error);
+            //console.log(error);
             return []
            }
            return [...data]
@@ -24,10 +24,19 @@ export const useWorkbook = () => {
                 console.log(error);
                 return false;
             }else if(data.id_workbook > 0){
-                console.log("Workbook created successfully:", data);
                 return true;
             }
             return true;
+        },
+
+        updateWorkbook: async (body) => {
+            const json = {
+                id_workbook: body.currentWorkbookId,
+                workbook_name: body.workbookName
+            }
+            const [data, error] = await updateWorkbook(json)
+        
+            return [data, error];
         }
     }
 }

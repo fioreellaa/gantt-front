@@ -8,6 +8,7 @@ import{
 function App() {
   
   const GanttPage = lazy(()=> import("./pages/GanttPage"))
+  const AuthPage = lazy(()=> import("./pages/AuthPage"))
   return (
     <>
     
@@ -15,7 +16,8 @@ function App() {
         <Suspense fallback={<div>Cargando...</div>}>
         <div className="w-full min-h-[60vh] p-4">
           <Routes>
-            <Route path='/' element={<GanttPage />} />
+            <Route path='/' element={<AuthPage />} />
+            <Route path='/gantt' element={<GanttPage />} />
           </Routes>
           </div>  
         </Suspense>

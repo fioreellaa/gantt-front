@@ -20,7 +20,7 @@ function CreateWorkbook({openDialog, setOpenDialog, onWorkbookCreated}) {
         if (!success) {
             console.error("Error al crear workbook");
         } else {
-            console.log("Workbook creado con éxito!");
+            //console.log("Workbook creado con éxito!");
             setWorkbookName("");
             setOpenDialog(false);
             if (typeof onWorkbookCreated === "function") {

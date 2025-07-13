@@ -7,7 +7,7 @@ export const useSections = () => {
         getTasks: async () => {
             const [data, error] = await getTasks()
             if (error) {
-                console.log(error);
+                //console.log(error);
                 return []
             }
             return [...data]
@@ -15,7 +15,7 @@ export const useSections = () => {
 
         getTasksByProject: async (id_project) => {
             const [data, error] = await getTasksByProject(id_project)
-            console.log("Tasks by project:", data);
+            //console.log("Tasks by project:", data);
             if (error) {
                 console.log(error);
                 return []
@@ -27,26 +27,30 @@ export const useSections = () => {
 
             const json = {
                 project: body.project,
-                parentTask: body.parent_task ? { id_task: body.parent_task.id_task } : null,
+                parentTask: body.parentTask,
                 name_task: body.name_task,
                 description_task: body.description_task ?? "",
                 duration: body.duration ?? 0,
                 start_date: body.start_date,
                 end_date: body.end_date,
                 progress: body.progress ?? 0,
-                state: body.state ?? 1
+                state: body.state ?? 1,
+                type: body.type // 1: summary, 2: task, 3: milestone
             };
 
             const [data, error] = await saveTask(json)
 
             if (error) {
-                console.log(error, json);
-                return false;
-            } else if (data.id_task > 0) {
-                console.log("Task created successfully:", data);
-                return true;
+                //console.error("Error al guardar tarea:", error, json);
+                return [null, error];
             }
-            return true;
+
+            if (data?.id_task > 0) {
+                //console.log("Task created successfully:", data);
+                return [data, null]; 
+            }
+
+            return [null, "Error desconocido"];
         }
     }
 }
