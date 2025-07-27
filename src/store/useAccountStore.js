@@ -7,15 +7,14 @@ export const useAccountStore = create(
       account: null,
       admin: false,
 
-      setCurrent: (account) => 
+      setCurrent: (account) =>
         set({
           account: {
             id_user: account.id_user,
-            username: account.username
-            // apellidoUsuario: account.apellidoUsuario,
-            // direccionUsuario: account.direccionUsuario,
-            // telefonoUsuario: account.telefonoUsuario,
-            // correoUsuario: account.correoUsuario,
+            username: account.username,
+            email: account.email,
+            role: account.role,
+            enabled: account.enabled
           },
           admin: account.role === "ADMIN"
         }),
@@ -25,9 +24,9 @@ export const useAccountStore = create(
           account: null,
           admin: false
         })
-      
+
     }), {
-      name: "account"
-    }
+    name: "account"
+  }
   )
 )
