@@ -1,7 +1,7 @@
 import { Divider } from "@mui/material";
 import ProjectOptions from "../components/layout/ProjectOptions";
 import Hamburguesa from "../components/dashboard/Hamburguesa";
-import GanttItem from "../components/gantt/ganttItem";
+import GanttItem from "../components/gantt/GanttItem";
 import "wx-react-gantt/dist/gantt.css";
 import { useState } from "react";
 import { useAccountStore } from "../store/useAccountStore"; 
