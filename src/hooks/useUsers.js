@@ -50,6 +50,7 @@ export const useUsers = () => {
             }
 
             if (data?.id_user > 0) {
+                setCurrent(data);
                 return { data, error: null };
             }
 
