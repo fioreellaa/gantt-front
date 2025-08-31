@@ -4,6 +4,7 @@ export const getFetch = async (url) => {
   let result = [null, null]
   try {
     const response = await fetch(url, {
+      withCredntials: true,
       credentials: 'include'
     });
     
@@ -39,6 +40,7 @@ export const postFetch = async (url, body) => {
       headers: {
         "Content-Type": "application/json"
       },
+      withCredntials: true,
       credentials: "include",
       body: JSON.stringify(body)
     })
@@ -85,6 +87,7 @@ export const putFetch = async (url, body) => {
       headers: {
         "Content-Type": "application/json"
       },
+      withCredntials: true,
       credentials: "include",
       body: JSON.stringify(body)
     })
